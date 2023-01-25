@@ -33,21 +33,12 @@ defaults
 	errorfile 503 /etc/haproxy/errors/503.http
 	errorfile 504 /etc/haproxy/errors/504.http
 
-# start of parameters for zeeweb.tech
-frontend betascribbles.tech-http-frontend
-	bind	 *:80
-	http-request set-header X-Forwarded-Proto http
-	default_backend	 beta-scribbles.tech-backend
+frontend myfrontend
+	bind *:80
+	bind *:443 ssl crt /etc/haproxy/certs/www.zeeweb.tech.pem
+	default_backend myservers
 
-
-frontend  zeeweb.tech-https-frontend
-	bind *:443 ssl crt /etc/ssl/zeeweb.tech.pem
-	http-request set-header X-Forwarded-Proto https
-        default_backend zeeweb.tech-backend
-
-
-backend zeeweb.tech-backend
-        balance roundrobin
-        server 82202-web-01 100.24.74.197:80 check
-        server 82202-web-02 100.25.147.92:80 check
-# end of parameters
+backend myservers
+	balance roundrobin
+	server web-01 100.24.74.197:80 check
+	server web-02 52.91.117.197:80 check	
